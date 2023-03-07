@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liutao.dao.CheckItemDao">
+<!--    public void add(CheckItem checkItem);-->
+    <insert id="add" parameterType="com.liutao.pojo.CheckItem">
+        insert into t_checkitem(code,name,sex,age,price,type,remark,attention)
+        values
+            (#{code},#{name},#{sex},#{age},#{price},#{type},#{remark},#{attention})
+    </insert>
+<!--    Page<CheckItem>selectByCondition(String queryString);-->
+    <select id="selectByCondition" parameterType="String" resultType="com.liutao.pojo.CheckItem">
+        select * from t_checkitem
+        <if test="value != null and value.length > 0">
+            where code = #{value} or name = #{value}
+        </if>
+    </select>
+<!--    long findCountByCheckItemId(Integer id);-->
+    <select id="findCountByCheckItemId" parameterType="int" resultType="long">
+        select count(*) from t_checkgroup_checkitem where checkitem_id = #{id}
+    </select>
+
+<!--    void deleteById(Integer id);-->
+    <delete id="deleteById" parameterType="int">
+        delete from t_checkitem where id = #{id}
+    </delete>
+
+<!--    void edit(CheckItem checkItem);-->
+    <update id="edit" parameterType="com.liutao.pojo.CheckItem">
+        update t_checkitem
+        <set>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="sex != null">
+                sex = #{sex},
+            </if>
+            <if test="code != null">
+                code = #{code},
+            </if>
+            <if test="age != null">
+                age = #{age},
+            </if>
+            <if test="price != null">
+                price = #{price},
+            </if>
+            <if test="type != null">
+                type = #{type},
+            </if>
+            <if test="attention != null">
+                attention = #{attention},
+            </if>
+            <if test="remark != null">
+                remark = #{remark},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--    CheckItem findById(Integer id);-->
+    <select id="findById" parameterType="int" resultType="com.liutao.pojo.CheckItem">
+        select * from t_checkitem where id = #{id}
+    </select>
+
+<!--    List<CheckItem> findAll();-->
+    <select id="findAll" resultType="com.liutao.pojo.CheckItem">
+        select * from t_checkitem;
+    </select>
+<!--    根据检查组id查询关联的检查项-->
+    <select id="findCheckItemById" parameterType="int" resultType="com.liutao.pojo.CheckItem">
+        select * from t_checkitem
+        where id
+        in (select checkitem_id from t_checkgroup_checkitem where checkgroup_id=#{id})
+    </select>
+
+
+</mapper>

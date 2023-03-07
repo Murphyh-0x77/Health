@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liutao.dao.OrderSettingDao">
+<!--    void add(OrderSetting orderSetting);-->
+    <insert id="add" parameterType="com.liutao.pojo.OrderSetting">
+        insert into t_ordersetting
+            (orderDate,number,reservations)
+        values
+            (#{orderDate},#{number},#{reservations})
+    </insert>
+
+<!--    long findCountByOrderDate(Date orderDate);-->
+    <select id="findCountByOrderDate" parameterType="date" resultType="long">
+        select count(id)
+        from t_ordersetting where orderDate = #{orderDate};
+    </select>
+
+<!--    void editNumberByOrderDate(OrderSetting orderSetting);-->
+    <update id="editNumberByOrderDate" parameterType="com.liutao.pojo.OrderSetting">
+        update t_ordersetting
+            set number = #{number}
+            where orderDate = #{orderDate}
+    </update>
+    <update id="editReservationsByOrderDate" parameterType="com.liutao.pojo.OrderSetting">
+        update t_ordersetting set reservations = #{reservations} where orderDate = #{orderDate}
+    </update>
+    <!--    List<OrderSetting> getOrderSettingByMonth(Map map);-->
+    <select id="getOrderSettingByMonth"
+            parameterType="hashmap"
+            resultType="com.liutao.pojo.OrderSetting">
+        select * from t_ordersetting where orderDate between #{dateBegin} and #{dateEnd}
+    </select>
+    <select id="findByOrderDate" parameterType="date" resultType="com.liutao.pojo.OrderSetting">
+        select * from t_ordersetting where orderDate = #{orderDate}
+    </select>
+
+
+</mapper>
